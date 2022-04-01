@@ -1,3 +1,11 @@
+"""_summary_
+    Using scrapy, constantly checks and prints prices for 1b1b unit in vox at culver city 
+
+Returns:
+    prints prices
+"""
+
+
 from concurrent.futures import thread
 import threading
 import subprocess
@@ -22,13 +30,16 @@ def price_query():
 
 def crawl():
     while True:
-        subprocess.run("scrapy crawl prices".split())
+        subprocess.run("scrapy crawl prices -s LOG_ENABLED=False".split())
         time.sleep(3600)
     
 def log_process():
     while True:
-        price = price_query()
-        print("Current price for 1b1b is " + price)
+        try:
+            price = price_query()
+            print("Current price for 1b1b is " + price)
+        except:
+            print("Waiting to crawl")
         time.sleep(10)
 
 if __name__ == "__main__":
